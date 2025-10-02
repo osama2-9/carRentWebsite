@@ -24,10 +24,19 @@ export const dashboardMetrics = async (req, res) => {
       },
     });
 
+    const totalRentals = await prisma.rental.count({
+      where: {
+        status: {
+          equals: "CONFIRMED",
+        },
+      },
+    });
+
     const stats = {
       revenue: revenue._sum.amount || 0,
       totalUsers,
       totalCars,
+      totalRentals,
     };
 
     return res.status(200).json(stats);

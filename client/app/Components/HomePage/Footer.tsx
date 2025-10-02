@@ -282,18 +282,6 @@ const Footer: React.FC = () => {
                   </p>
                 </div>
               </div>
-
-              <div className="flex items-start">
-                <Clock className="h-5 w-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-white font-medium">Business Hours</p>
-                  <p className="text-gray-400 text-sm">
-                    Mon - Fri: 6:00 AM - 10:00 PM
-                    <br />
-                    Sat - Sun: 8:00 AM - 8:00 PM
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

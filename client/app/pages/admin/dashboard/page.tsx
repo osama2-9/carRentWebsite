@@ -81,8 +81,8 @@ export default function AdminDashboard() {
                     isLoading={isMetricsLoading}
                   />
                   <StatsCard
-                    title="Active Rentals"
-                    value={metrics?.totalCars || 0}
+                    title="Total Rentals"
+                    value={metrics?.totalRentals || 0}
                     isLoading={isMetricsLoading}
                   />
                   <StatsCard

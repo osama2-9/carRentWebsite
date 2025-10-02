@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Rental" ALTER COLUMN "pickupTime" SET DATA TYPE TEXT,
+ALTER COLUMN "returnTime" SET DATA TYPE TEXT;

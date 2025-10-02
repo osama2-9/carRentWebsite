@@ -1,9 +1,10 @@
 # CAR-RENT-WEBSITE
 *Drive Freedom, Rent Smarter, Experience More*
 
-![last-commit](https://img.shields.io/github/last-commit/osama2-9/carRentWebsite/?style=flat&logo=git&logoColor=white&color=0080ff)
-![repo-top-language](https://img.shields.io/github/languages/top/osama2-9/carRentWebsite/?style=flat&color=0080ff)
-![repo-language-count](https://img.shields.io/github/languages/count/osama2-9/carRentWebsite/?style=flat&color=0080ff)
+![last-commit](https://img.shields.io/github/last-commit/osama2-9/car-rent-website?style=flat&logo=git&logoColor=white&color=0080ff)
+![repo-top-language](https://img.shields.io/github/languages/top/osama2-9/car-rent-website?style=flat&color=0080ff)
+![repo-language-count](https://img.shields.io/github/languages/count/osama2-9/car-rent-website?style=flat&color=0080ff)
+
 
 **Built with:**
 ![Node.js](https://img.shields.io/badge/Node.js-339933.svg?style=flat&logo=node.js&logoColor=white)

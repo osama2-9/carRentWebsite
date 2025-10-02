@@ -2,9 +2,9 @@ name: CI Pipeline
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
 
 jobs:
   server:
@@ -22,17 +22,10 @@ jobs:
         with:
           node-version: 20
           cache: "npm"
-
-      - name: List files for debugging
-        run: ls -la
+          cache-dependency-path: ./server/package-lock.json  
 
       - name: Install dependencies
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+        run: npm ci
 
       - name: Lint and Type Check
         run: |
@@ -59,17 +52,10 @@ jobs:
         with:
           node-version: 20
           cache: "npm"
-
-      - name: List files for debugging
-        run: ls -la
+          cache-dependency-path: ./client/package-lock.json   
 
       - name: Install dependencies
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+        run: npm ci
 
       - name: Lint and Type Check
         run: |

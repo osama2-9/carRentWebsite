@@ -4,7 +4,6 @@ import supbase from "../utils/supbase.js";
 import { generateContractPDF } from "../contracts/generateContract.js";
 import { sendContractSignEmail } from "../emails/sendContractSignEmail.js";
 import { validateDocumentsFromFiles } from "../docAnalyzer/documentsValidator.js";
-import { escapeRegExp } from "pdf-lib";
 
 export const searchCars = async (req, res) => {
   try {
@@ -97,6 +96,7 @@ export const searchCars = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 export const verifyDocuments = async (req, res) => {
   try {

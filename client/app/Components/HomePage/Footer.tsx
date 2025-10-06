@@ -1,21 +1,16 @@
 "use client";
 import React from "react";
 import {
-  Car,
   Phone,
   Mail,
   MapPin,
-  Clock,
   Facebook,
   Twitter,
   Instagram,
   Linkedin,
   Youtube,
-  Shield,
   Award,
   Users,
-  CreditCard,
-  Download,
   ArrowUp,
 } from "lucide-react";
 
@@ -91,57 +86,42 @@ const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-3">
               <li>
-                <a href="/cars" className="hover:text-white  transition-colors">
+                <a href="/#" className="hover:text-white  transition-colors">
                   Browse Cars
                 </a>
               </li>
               <li>
-                <a
-                  href="/locations"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   Locations
                 </a>
               </li>
               <li>
-                <a
-                  href="/pricing"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   Pricing
                 </a>
               </li>
               <li>
-                <a
-                  href="/about"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   About Us
                 </a>
               </li>
               <li>
-                <a
-                  href="/contact"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   Contact
                 </a>
               </li>
               <li>
-                <a href="/faq" className="hover:text-white  transition-colors">
+                <a href="/#" className="hover:text-white  transition-colors">
                   FAQ
                 </a>
               </li>
               <li>
-                <a href="/blog" className="hover:text-white  transition-colors">
+                <a href="/#" className="hover:text-white  transition-colors">
                   Blog
                 </a>
               </li>
               <li>
-                <a
-                  href="/careers"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   Careers
                 </a>
               </li>
@@ -152,66 +132,42 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold text-white mb-6">Services</h3>
             <ul className="space-y-3">
               <li>
-                <a
-                  href="/economy-cars"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   Economy Cars
                 </a>
               </li>
               <li>
-                <a
-                  href="/luxury-cars"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   Luxury Cars
                 </a>
               </li>
               <li>
-                <a
-                  href="/suv-rental"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   SUV Rental
                 </a>
               </li>
               <li>
-                <a
-                  href="/long-term"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   Long-term Rental
                 </a>
               </li>
               <li>
-                <a
-                  href="/corporate"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   Corporate Plans
                 </a>
               </li>
               <li>
-                <a
-                  href="/airport-pickup"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   Airport Pickup
                 </a>
               </li>
               <li>
-                <a
-                  href="/chauffeur"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   Chauffeur Service
                 </a>
               </li>
               <li>
-                <a
-                  href="/insurance"
-                  className="hover:text-white  transition-colors"
-                >
+                <a href="/#" className="hover:text-white  transition-colors">
                   Insurance Options
                 </a>
               </li>
@@ -296,19 +252,19 @@ const Footer: React.FC = () => {
 
             <div className="flex items-center space-x-6 text-sm">
               <a
-                href="/privacy"
+                href="/#"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 Privacy Policy
               </a>
               <a
-                href="/terms"
+                href="/#"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 Terms of Service
               </a>
               <a
-                href="/cookies"
+                href="/#"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 Cookie Policy

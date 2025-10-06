@@ -79,6 +79,7 @@ export default function AdminDashboard() {
                     title="Total Revenue"
                     value={metrics?.revenue || 0}
                     isLoading={isMetricsLoading}
+                    dollerSign={true}
                   />
                   <StatsCard
                     title="Total Rentals"

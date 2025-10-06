@@ -22,99 +22,27 @@ export const createPaymentIntent = async (req, res) => {
       error: "Internal server error",
     });
   }
-};
-export const createCheckoutSession = async (req, res) => {
+};export const createCheckoutSession = async (req, res) => {
   try {
     const { amount, rentalId, customerId } = req.body;
 
-    const paymentObj = await prisma.payment.findFirst({
-      where: {
-        rentalId: parseInt(rentalId),
-      },
-      select: {
-        paidAt: true,
-        id: true,
-        status: true,
-      },
+    // 1. Check rental exists
+    const rental = await prisma.rental.findUnique({
+      where: { id: parseInt(rentalId) },
     });
 
-    let payment;
-    if (
-      paymentObj &&
-      (paymentObj.paidAt == null || paymentObj.status === "FAILED")
-    ) {
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
-        line_items: [
-          {
-            price_data: {
-              currency: "usd",
-              product_data: {
-                name: "Rental",
-              },
-              unit_amount: Math.round(amount * 100),
-            },
-            quantity: 1,
-          },
-        ],
-        mode: "payment",
-        metadata: {
-          rentalId: rentalId,
-          customerId: customerId,
-        },
-        success_url:
-          "http://localhost:3000/pages/customer/dashboard?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url:
-          "http://localhost:3000/pages/customer/dashboard?session_id={CHECKOUT_SESSION_ID}",
-      });
-
-      if (!session) {
-        return res.status(400).json({
-          error: "Failed to create checkout session",
-        });
-      }
-
-      payment = await prisma.payment.update({
-        where: {
-          id: paymentObj.id,
-        },
-        data: {
-          method: "STRIPE",
-          amount: amount,
-          status: "PENDING",
-          stripePaymentIntentId: session.id,
-          paidAt: null,
-        },
-      });
-
-      await prisma.rental.update({
-        where: {
-          id: parseInt(rentalId),
-        },
-        data: {
-          payment: {
-            connect: {
-              id: payment.id,
-            },
-          },
-        },
-      });
-
-      return res.status(200).json({
-        url: session.url,
-        sessionId: session.id,
-      });
+    if (!rental) {
+      return res.status(404).json({ error: "Rental not found" });
     }
 
+    // 2. Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
         {
           price_data: {
             currency: "usd",
-            product_data: {
-              name: "Rental",
-            },
+            product_data: { name: "Rental" },
             unit_amount: Math.round(amount * 100),
           },
           quantity: 1,
@@ -132,55 +60,59 @@ export const createCheckoutSession = async (req, res) => {
     });
 
     if (!session) {
-      return res.status(400).json({
-        error: "Failed to create checkout session",
-      });
+      return res
+        .status(400)
+        .json({ error: "Failed to create checkout session" });
     }
 
-    const rental = await prisma.rental.findUnique({
-      where: {
-        id: parseInt(rentalId),
-      },
-    });
-
-    if (!rental) {
-      return res.status(400).json({
-        error: "Rental not found",
+    // 3. Create/Update Payment + Link Rental in a transaction
+    const payment = await prisma.$transaction(async (tx) => {
+      let paymentRecord = await tx.payment.findFirst({
+        where: { rentalId: parseInt(rentalId) },
       });
-    }
 
-    payment = await prisma.payment.create({
-      data: {
-        method: "STRIPE",
-        amount: amount,
-        rentalId: parseInt(rentalId),
-        status: "PENDING",
-        stripePaymentIntentId: session.id,
-      },
-    });
-
-    await prisma.rental.update({
-      where: {
-        id: parseInt(rentalId),
-      },
-      data: {
-        payment: {
-          connect: {
-            id: payment.id,
+      if (paymentRecord) {
+        // Update existing payment
+        paymentRecord = await tx.payment.update({
+          where: { id: paymentRecord.id },
+          data: {
+            method: "STRIPE",
+            amount,
+            status: "PENDING",
+            stripePaymentIntentId: session.id,
+            paidAt: null,
           },
-        },
-      },
+        });
+      } else {
+        // Create new payment
+        paymentRecord = await tx.payment.create({
+          data: {
+            method: "STRIPE",
+            amount,
+            rentalId: parseInt(rentalId),
+            status: "PENDING",
+            stripePaymentIntentId: session.id,
+          },
+        });
+      }
+
+      // Link rental → payment
+      await tx.rental.update({
+        where: { id: parseInt(rentalId) },
+        data: { payment: { connect: { id: paymentRecord.id } } },
+      });
+
+      return paymentRecord;
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       url: session.url,
       sessionId: session.id,
+      paymentId: payment.id,
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      error: "Internal server error",
-    });
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 export const verifyPaymentSession = async (req, res) => {
@@ -188,7 +120,7 @@ export const verifyPaymentSession = async (req, res) => {
     const { sessionId, rentalId } = req.body;
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-    if (session.payment_status === "paid") {
+    if (session.payment_status  === "paid") {
       await prisma.payment.update({
         where: {
           stripePaymentIntentId: session.id,

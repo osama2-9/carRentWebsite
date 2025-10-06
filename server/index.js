@@ -4,7 +4,6 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import http from "http";
 import { Server as SocketIOServer } from "socket.io";
-import testConnection from "./DB/prisma/connectionTest.js";
 import authRouter from "./routes/auth.route.js";
 import adminRouter from "./routes/admin.route.js";
 import CarRouter from "./routes/car.route.js";
@@ -15,8 +14,9 @@ import staffRouter from "./routes/staff.route.js";
 import paymentRouter from "./routes/payment.route.js";
 import analysticRoute from "./routes/analytics.route.js";
 import webhook from "./webhook/stripeWebhook.js";
-import cron from "node-cron";
-import { autoCancelRentals } from "./jobs/autoCancelRentals.js";
+import "./services/redis/redis.js";
+import "./DB/prisma/connectionTest.js";
+import "./jobs/jobRunner.js";
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
@@ -53,12 +53,8 @@ app.use("/api/staff", staffRouter);
 app.use("/api/payment", paymentRouter);
 app.use("/api/analytics", analysticRoute);
 
-cron.schedule("*/1 * * * *", () => {
-  autoCancelRentals().catch((err) => console.log("auto cancel: ", err.message));
-});
-
 server.listen(process.env.PORT, () => {
   console.log("server running");
 });
 
-export { io  };
+export { io };

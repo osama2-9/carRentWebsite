@@ -24,6 +24,7 @@
     "express": "^5.1.0",
     "googleapis": "^150.0.1",
     "install": "^0.13.0",
+    "ioredis": "^5.8.0",
     "jsonwebtoken": "^9.0.2",
     "ngrok": "^5.0.0-beta.2",
     "node-cron": "^4.2.1",

@@ -1,4 +1,5 @@
 import prisma from "../DB/prisma/prismaClient.js";
+import { getCache, setCache } from "../services/redis/redisCache.js";
 
 export const addNewCar = async (req, res) => {
   try {
@@ -125,11 +126,8 @@ export const getAllCars = async (req, res) => {
         createdAt: "desc",
       },
     });
-
-    if (!cars) {
-      return res.status(404).json({
-        error: "No cars found",
-      });
+    if (cars.length === 0) {
+      return res.status(404).json({ error: "No cars found" });
     }
     const totalCars = await prisma.car.count({
       where: {
@@ -150,6 +148,115 @@ export const getAllCars = async (req, res) => {
     return res.status(500).json({
       error: "Internal server error",
     });
+  }
+};
+
+export const getCarsMake = async (req, res) => {
+  try {
+    const makes = await prisma.car.findMany({
+      select: {
+        make: true,
+      },
+    });
+
+    if (makes.length == 0) {
+      return res.status(400).json({
+        error: "No makes found",
+      });
+    }
+
+    return res.status(200).json({
+      data: makes,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error: "Internal server error",
+    });
+  }
+};
+export const filterCars = async (req, res) => {
+  try {
+    const {
+      make,
+      model,
+      year,
+      seats,
+      fuelType,
+      transmission,
+      categoryId,
+      locationId,
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const pageInt = Math.max(parseInt(page, 10) || 1, 1);
+    const limitInt = Math.min(parseInt(limit, 10) || 10, 50);
+
+    const cacheKey = `cars:${make || ""}:${model || ""}:${
+      year || ""
+    }:${pageInt}:${limitInt}`;
+    const cached = await getCache(cacheKey);
+    if (cached) {
+      return res.json({ status: "success", data: cached, cached: true });
+    }
+
+    const where = { isDeleted: false };
+    if (make) where.make = { in: make.split(","), mode: "insensitive" };
+    if (model) where.model = { contains: model, mode: "insensitive" };
+    if (year) where.year = parseInt(year, 10);
+    if (seats) where.seats = parseInt(seats, 10);
+    if (fuelType) where.fuelType = fuelType;
+    if (transmission) where.transmission = transmission;
+    if (categoryId) where.categoryId = parseInt(categoryId, 10);
+    if (locationId) where.locationId = parseInt(locationId, 10);
+
+    const [cars, total] = await prisma.$transaction([
+      prisma.car.findMany({
+        where,
+        select: {
+          id: true,
+          make: true,
+          model: true,
+          category: { select: { id: true, name: true, dailyRate: true } },
+          location: {
+            select: {
+              id: true,
+              city: true,
+              address: true,
+              googleMapsUrl: true,
+            },
+          },
+          available: true,
+          imagesUrl: true,
+          fuelType: true,
+          licensePlate: true,
+          seats: true,
+          transmission: true,
+          year: true,
+          createdAt: true,
+          featuredImage: true,
+        },
+        skip: (pageInt - 1) * limitInt,
+        take: limitInt,
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.car.count({ where }),
+    ]);
+
+    const response = {
+      cars,
+      pagination: { page: pageInt, limit: limitInt, total },
+    };
+
+    if (cars.length) await setCache(cacheKey, response, 300);
+
+    return res.json({ status: "success", data: response });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ status: "error", message: "Internal server error" });
   }
 };
 

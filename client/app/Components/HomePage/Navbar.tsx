@@ -48,19 +48,19 @@ const Navbar: React.FC = () => {
                 Home
               </Link>
               <Link
-                href="#cars"
+                href="/pages/cars"
                 className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
               >
                 Cars
               </Link>
               <Link
-                href="/locations"
+                href="/#"
                 className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
               >
                 Locations
               </Link>
               <Link
-                href="/about"
+                href="/#"
                 className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
               >
                 About
@@ -230,7 +230,6 @@ const Navbar: React.FC = () => {
               </>
             ) : (
               <>
-               
                 <div className="space-y-1">
                   <Link
                     href="pages/login"

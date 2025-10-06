@@ -104,7 +104,7 @@ const FeaturedCars: React.FC = () => {
 
         <div className="mt-16 text-center">
           <a
-            href="/cars"
+            href="/pages/cars"
             className="inline-flex items-center px-8 py-4 border-2 border-gray-300 shadow-lg text-lg font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-300"
           >
             <Car className="w-5 h-5 mr-2" />

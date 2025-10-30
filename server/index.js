@@ -16,7 +16,6 @@ import analysticRoute from "./routes/analytics.route.js";
 import webhook from "./webhook/stripeWebhook.js";
 import "./services/redis/redis.js";
 import "./DB/prisma/connectionTest.js";
-import "./jobs/jobRunner.js";
 dotenv.config();
 const app = express();
 const server = http.createServer(app);

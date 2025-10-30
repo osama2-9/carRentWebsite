@@ -1,9 +1,10 @@
 import cron from "node-cron";
 import { autoCancelRentals } from "./autoCancelRentals.js";
-import { remarkCarsAbilabality } from "./remarkCarsStatus.js";
+import { remarkCarsAbilabality } from "./remarkCarsAbilabality.js";
 import testConnection from "../DB/prisma/connectionTest.js";
 
 await testConnection();
+
 
 cron.schedule("*/10 * * * *", async () => {
   console.log(`[${new Date().toISOString()}] Running autoCancelRentals...`);
